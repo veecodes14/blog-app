@@ -5,7 +5,20 @@ import { Blog } from '../models/blogModel';
 
 export const createBlog = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { title, content, author } = req.body;
+        const { title, content, author } = req.body as {title: string; content: string; author: string;};
+
+        if (!title || title.trim().length === 0 ) {
+            res.status(403).json({message: 'Title cannot be empty'})
+        };
+
+        if (!content || content.trim().length === 0 ) {
+            res.status(403).json({message: 'Content cannot be empty'})
+        };
+
+        if (!author || author.trim().length === 0) {
+            res.status(403).json({message: 'Author name cannot be blank'})
+        };
+
 
         // create new blog post
         const blog = await Blog.create({ title, content, author });
